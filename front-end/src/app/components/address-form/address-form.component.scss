@@ -1,0 +1,27 @@
+.full-width {
+  width: 100%;
+  margin-bottom: 10px;
+}
+
+.half-width {
+  width: 48%;
+  margin-right: 2%;
+  margin-bottom: 10px;
+}
+
+mat-dialog-content {
+  max-height: 100vh;
+  overflow-y: auto;
+  padding: 20px;
+}
+
+mat-form-field {
+  margin-bottom: 20px;
+}
+
+.form-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 16px;
+  margin-top: 20px;
+} 

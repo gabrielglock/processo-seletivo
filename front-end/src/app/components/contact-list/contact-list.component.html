@@ -1,0 +1,79 @@
+<div class="contact-list">
+  <div class="header">
+    <h1>Lista de Contatos</h1>
+    <div class="header-actions">
+      <form [formGroup]="filterForm" class="filter-form">
+        <mat-radio-group formControlName="type" class="filter-radio-group">
+          <mat-radio-button [value]="'todos'" class="filter-radio">Todos</mat-radio-button>
+          <mat-radio-button [value]="'pf'" class="filter-radio">Pessoa Física</mat-radio-button>
+          <mat-radio-button [value]="'pj'" class="filter-radio">Pessoa Jurídica</mat-radio-button>
+        </mat-radio-group>
+      </form>
+      <mat-form-field appearance="outline" class="search-field">
+        <mat-label>Buscar</mat-label>
+        <input matInput 
+               [(ngModel)]="searchTerm" 
+               (ngModelChange)="onSearch($event)">
+               
+        <button mat-icon-button matSuffix *ngIf="searchTerm" (click)="clearSearch()">
+          <mat-icon>close</mat-icon>
+        </button>
+      </mat-form-field>
+      <button mat-raised-button color="primary" (click)="openContactForm()">
+        Novo Contato
+      </button>
+    </div>
+  </div>
+  
+  <div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>Carregando contatos...</p>
+  </div>
+
+  <div class="no-contacts" *ngIf="!loading && contacts.length === 0">
+    <p>Nenhum contato cadastrado</p>
+  </div>
+
+  <div class="contacts-grid" *ngIf="!loading && contacts.length > 0">
+    <mat-card *ngFor="let contact of contacts" class="contact-card">
+      <mat-card-header>
+        <mat-card-title>{{ getContactName(contact) }}</mat-card-title>
+        <mat-card-subtitle>
+          {{ getContactTypeLabel(contact.type) }}
+        </mat-card-subtitle>
+      </mat-card-header>
+
+      <mat-card-content>
+        
+        <p><strong>Email:</strong> {{ contact.email }}</p>
+        <p><strong>Telefone:</strong> {{ contact.phoneNumber }}</p>
+        <p *ngIf="contact.description">
+          <strong>Descrição:</strong> {{ contact.description }}
+        </p>
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="openContactForm(contact)">
+          Editar
+        </button>
+        <button mat-button color="accent" (click)="openAddressDialog(contact)">
+          Endereços
+        </button>
+        <button mat-flat-button color="warn" (click)="openDeleteDialog(contact)">
+          Excluir
+        </button>
+      </mat-card-actions>
+    </mat-card>
+  </div>
+
+  <mat-paginator
+    *ngIf="!loading && contacts.length > 0"
+    [length]="totalItems"
+    [pageSize]="pageSize"
+    [pageSizeOptions]="pageSizeOptions"
+    [pageIndex]="currentPage"
+    (page)="onPageChange($event)"
+    showFirstLastButtons
+    aria-label="Selecione a página">
+  </mat-paginator>
+</div> 

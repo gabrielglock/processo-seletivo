@@ -1,0 +1,69 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Editar Endereço' : 'Novo Endereço' }}</h2>
+
+<form [formGroup]="addressForm" (ngSubmit)="onSubmit()" class="address-form">
+
+ <mat-form-field appearance="outline" class="full-width">
+        <mat-label>CEP</mat-label>
+        <input matInput formControlName="cep" [disabled]="loading" mask="00000-000">
+        <mat-error *ngIf="addressForm.get('cep')?.hasError('required')">
+            CEP é obrigatório
+        </mat-error>
+        <mat-error *ngIf="addressForm.get('cep')?.hasError('pattern')">
+            CEP inválido
+        </mat-error>
+</mat-form-field>
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Logradouro</mat-label>
+    <input matInput formControlName="address" [disabled]="loading" maxlength="200">
+    <mat-error *ngIf="addressForm.get('address')?.hasError('required')">
+      Logradouro é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="half-width">
+    <mat-label>Número</mat-label>
+    <input matInput formControlName="addressNumber" [disabled]="loading" maxlength="10">
+    <mat-error *ngIf="addressForm.get('addressNumber')?.hasError('required')">
+      Número é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="half-width">
+    <mat-label>Complemento</mat-label>
+    <input matInput formControlName="addressExtra" [disabled]="loading" maxlength="200">
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <mat-label>Bairro</mat-label>
+    <input matInput formControlName="cityNeighborhood" [disabled]="loading" maxlength="200">
+    <mat-error *ngIf="addressForm.get('cityNeighborhood')?.hasError('required')">
+      Bairro é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="half-width">
+    <mat-label>Cidade</mat-label>
+    <input matInput formControlName="stateCity" [disabled]="loading" maxlength="200">
+    <mat-error *ngIf="addressForm.get('stateCity')?.hasError('required')">
+      Cidade é obrigatória
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="half-width">
+    <mat-label>Estado</mat-label>
+    <input matInput formControlName="contryState" [disabled]="loading" maxlength="30">
+    <mat-error *ngIf="addressForm.get('contryState')?.hasError('required')">
+      Estado é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+
+
+  <div class="form-actions">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="loading">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!addressForm.valid || loading">
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      <span *ngIf="!loading">{{ isEditing ? 'Atualizar' : 'Salvar' }}</span>
+    </button>
+  </div>
+</form> 

@@ -1,0 +1,92 @@
+<h2 mat-dialog-title>{{ isEditing ? 'Editar Contato' : 'Novo Contato' }}</h2>
+
+<form [formGroup]="contactForm" (ngSubmit)="onSubmit()" class="contact-form">
+  <div class="type-selection">
+    <mat-radio-group formControlName="type" [disabled]="loading" class="radio-group">
+      <mat-radio-button default="PF" [value]="'PF'" class="radio-button">Pessoa Física</mat-radio-button>
+      <mat-radio-button [value]="'PJ'" class="radio-button">Pessoa Jurídica</mat-radio-button>
+    </mat-radio-group>
+    
+    <mat-error *ngIf="contactForm.get('type')?.hasError('required')">
+      Tipo de contato é obrigatório
+    </mat-error>
+  </div>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput formControlName="email" type="email" [disabled]="loading" placeholder="Email">
+    <mat-error *ngIf="contactForm.get('email')?.hasError('required')">
+      Email é obrigatório
+    </mat-error>
+    <mat-error *ngIf="contactForm.get('email')?.hasError('email')">
+      Email inválido
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    
+    <input matInput formControlName="phoneNumber" [disabled]="loading" placeholder="Telefone"  mask="(00) 00000-0000">
+    <mat-error *ngIf="contactForm.get('phoneNumber')?.hasError('required')">
+      Telefone é obrigatório
+    </mat-error>
+  </mat-form-field>
+
+  <mat-form-field appearance="outline" class="full-width">
+    <input matInput formControlName="description" placeholder="Descrição" [disabled]="loading">
+    
+  </mat-form-field>
+
+  <!-- PF Fields -->
+  <ng-container *ngIf="contactForm.get('type')?.value === 'PF'">
+    <mat-form-field appearance="outline" class="full-width">
+      
+      <input matInput formControlName="cpf" mask="000.000.000-00" [disabled]="loading" placeholder="CPF">
+      <mat-error *ngIf="contactForm.get('cpf')?.hasError('required')">
+        CPF é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="half-width">
+      
+      <input matInput formControlName="firstName" [disabled]="loading" placeholder="Nome">
+      <mat-error *ngIf="contactForm.get('firstName')?.hasError('required')">
+        Nome é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="half-width">
+      <mat-label>Sobrenome</mat-label>
+      <input matInput formControlName="surName" [disabled]="loading">
+      
+      <mat-error *ngIf="contactForm.get('surName')?.hasError('required')">
+        Sobrenome é obrigatório
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <!-- PJ Fields -->
+  <ng-container *ngIf="contactForm.get('type')?.value === 'PJ'">
+    <mat-form-field appearance="fill" class="full-width">
+      
+      <input matInput formControlName="cnpj" mask="00.000.000/0000-00" [disabled]="loading" placeholder="CNPJ">
+      <mat-error *ngIf="contactForm.get('cnpj')?.hasError('required')">
+        CNPJ é obrigatório
+      </mat-error>
+    </mat-form-field>
+
+    <mat-form-field appearance="outline" class="full-width">
+      
+      <input matInput formControlName="cnpjName" [disabled]="loading" placeholder="Razão Social">
+      <mat-error *ngIf="contactForm.get('cnpjName')?.hasError('required')">
+        Razão Social é obrigatória
+      </mat-error>
+    </mat-form-field>
+  </ng-container>
+
+  <div class="form-actions">
+    <button mat-button type="button" (click)="onCancel()" [disabled]="loading">Cancelar</button>
+    <button mat-raised-button color="primary" type="submit" [disabled]="!contactForm.valid || loading">
+      <mat-spinner diameter="20" *ngIf="loading"></mat-spinner>
+      <span *ngIf="!loading">{{ isEditing ? 'Atualizar' : 'Salvar' }}</span>
+    </button>
+  </div>
+</form> 

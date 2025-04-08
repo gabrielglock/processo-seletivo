@@ -1,0 +1,50 @@
+<h2 mat-dialog-title>Endereços de {{ getContactName() }}</h2>
+
+<div class="address-dialog">
+  <div class="loading" *ngIf="loading">
+    <mat-spinner></mat-spinner>
+    <p>Carregando endereços...</p>
+  </div>
+
+  <div class="no-addresses" *ngIf="!loading && addresses.length === 0">
+    <p>Nenhum endereço cadastrado</p>
+    <button mat-raised-button color="primary" (click)="openAddAddressDialog()">
+      Adicionar Endereço
+    </button>
+  </div>
+
+  <div class="addresses-list" *ngIf="!loading && addresses.length > 0">
+    <mat-card *ngFor="let address of addresses" class="address-card">
+      <mat-card-content>
+        
+        <p><strong>Logradouro:</strong> {{ address.address }}</p>
+        <p><strong>Número:</strong> {{ address.addressNumber }}</p>
+        <p><strong>Complemento:</strong> {{ address.addressExtra || 'N/A' }}</p>
+        <p><strong>Bairro:</strong> {{ address.cityNeighborhood }}</p>
+        <p><strong>Cidade:</strong> {{ address.stateCity }}</p>
+        <p><strong>Estado:</strong> {{ address.contryState }}</p>
+        <p><strong>CEP:</strong> {{ address.cep }}</p>
+        
+      </mat-card-content>
+
+      <mat-card-actions align="end">
+        <button mat-button color="primary" (click)="openEditAddressDialog(address)">
+          Editar
+        </button>
+        <button mat-flat-button color="warn" (click)="openDeleteDialog(address.id)">
+          Excluir
+        </button>
+      </mat-card-actions>
+    </mat-card>
+
+    <div class="add-address">
+      <button mat-raised-button color="primary" (click)="openAddAddressDialog()">
+        Adicionar Novo Endereço
+      </button>
+    </div>
+  </div>
+
+  <div class="dialog-actions">
+    <button mat-button (click)="onClose()">Fechar</button>
+  </div>
+</div> 
