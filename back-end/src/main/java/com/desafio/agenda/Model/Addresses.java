@@ -6,7 +6,15 @@ import jakarta.validation.constraints.Pattern;
 import java.util.Set;
 
 @Entity
+@Table(name="addresses",  schema= "agenda")
 public class Addresses {
+
+
+
+    public Addresses() {
+    }
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer id;
@@ -24,31 +32,17 @@ public class Addresses {
 
     private String addressNumber;
 
-    @ManyToMany
-    private Set<ContatoCnpj> addresesCnpj;
-
-    @ManyToMany
-    private Set<ContatoCpf> addressesCpf;
 
 
-    public Addresses() {
-    }
+    @ManyToOne
+    @JoinColumn(name = "contato_cpf_id_fk", referencedColumnName = "id_pf")
+    private ContatoCpf contatoCpf;
 
-    public Set<ContatoCnpj> getAddresesCnpj() {
-        return addresesCnpj;
-    }
+    // Relacionamento com ContatoCnpj
+    @ManyToOne
+    @JoinColumn(name = "contato_cnpj_id_fk",referencedColumnName = "id_pj")
+    private ContatoCnpj contatoCnpj;
 
-    public void setAddresesCnpj(Set<ContatoCnpj> addresesCnpj) {
-        this.addresesCnpj = addresesCnpj;
-    }
-
-    public Set<ContatoCpf> getContatosCpf() {
-        return addressesCpf;
-    }
-
-    public void setContatosCpf(Set<ContatoCpf> addressCpf) {
-        this.addressesCpf = addressCpf;
-    }
 
 
     public int getId() {
@@ -105,5 +99,21 @@ public class Addresses {
 
     public void setAddressNumber(String addressNumber) {
         this.addressNumber = addressNumber;
+    }
+
+    public ContatoCpf getContatoCpf() {
+        return contatoCpf;
+    }
+
+    public void setContatoCpf(ContatoCpf contatoCpf) {
+        this.contatoCpf = contatoCpf;
+    }
+
+    public ContatoCnpj getContatoCnpj() {
+        return contatoCnpj;
+    }
+
+    public void setContatoCnpj(ContatoCnpj contatoCnpj) {
+        this.contatoCnpj = contatoCnpj;
     }
 }

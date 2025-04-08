@@ -8,4 +8,5 @@ import java.util.List;
 public interface ContatoCpfRepository extends JpaRepository<ContatoCpf, Integer> {
 
     List<ContatoCpf> findByFirstNameContainingIgnoreCase(String nome);
+    List<ContatoCpf> findByCpfStartingWith(String cpf);
 }

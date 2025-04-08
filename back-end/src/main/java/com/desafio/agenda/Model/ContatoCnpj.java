@@ -1,20 +1,27 @@
 package com.desafio.agenda.Model;
-
 import com.desafio.agenda.Validation.CNPJ;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotEmpty;
 import jakarta.validation.constraints.Pattern;
-;
+
 
 import java.util.Set;
 
 @Entity
 @Table(name="contato_cnpj",  schema= "agenda")
 public class ContatoCnpj {
+    public ContatoCnpj() {
+    }
+
+
+
+
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name="id_pj")
+    private Integer idPj;
 
     @Pattern(regexp = "^[0-9]+$", message = "Apenas números são permitidos")
     @CNPJ
@@ -31,8 +38,10 @@ public class ContatoCnpj {
 
     private String description;
 
-    public ContatoCnpj() {
-    }
+
+    @OneToMany(mappedBy = "contatoCnpj", cascade = CascadeType.ALL, orphanRemoval = true)
+    private Set<Addresses> addresses;
+
 
     public Set<Addresses> getAddresses() {
         return addresses;
@@ -42,19 +51,13 @@ public class ContatoCnpj {
         this.addresses = addresses;
     }
 
-    @ManyToMany
-    @JoinTable(
-            name = "addresses_cnpj",
-            joinColumns = @JoinColumn(name = "address_id"),
-            inverseJoinColumns = @JoinColumn(name = "contato_cnpj_id"))
-    private Set<Addresses> addresses;
 
     public int getId() {
-        return id;
+        return idPj;
     }
 
-    public void setId(int id) {
-        this.id = id;
+    public void setId(int idPj) {
+        this.idPj = idPj;
     }
 
     public String getCnpj() {

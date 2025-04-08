@@ -11,14 +11,20 @@ import jakarta.validation.constraints.Size;
 import org.springframework.boot.autoconfigure.amqp.RabbitConnectionDetails;
 
 import java.nio.charset.Charset;
+import java.util.Hashtable;
 import java.util.Set;
 
 @Entity
 @Table(name="contato_cpf", schema="agenda")
 public class ContatoCpf {
+
+    public ContatoCpf() {
+    }
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    @Column(name = "id_pf")
+    private Integer idPf;
 
     @Pattern(regexp = "^[0-9]+$", message = "Apenas números são permitidos")
     @CPF
@@ -41,16 +47,16 @@ public class ContatoCpf {
     @Size(max = 250, message = "A descrição deve ter no máximo 250 caracteres")
     private String description;
 
-    @ManyToMany
-    @JoinTable(
-            name = "addresses_cpf",
-            joinColumns = @JoinColumn(name = "address_id"),
-            inverseJoinColumns = @JoinColumn(name = "contato_cpf_id"))
+    @OneToMany(mappedBy = "contatoCpf", cascade = CascadeType.ALL, orphanRemoval = true)
     private Set<Addresses> addresses;
 
-    public ContatoCpf() {
+    public Set<Addresses> getAddresses() {
+        return addresses;
     }
 
+    public void setAddresses(Set<Addresses> addresses) {
+        this.addresses = addresses;
+    }
 
     public String getCpf() {
         return cpf;
@@ -91,6 +97,7 @@ public class ContatoCpf {
     public void setPhoneNumber(String phoneNumber) {
         this.phoneNumber = phoneNumber;
     }
+
     public String getDescription() {
         return description;
     }
@@ -99,11 +106,10 @@ public class ContatoCpf {
         this.description = description;
     }
 
-    public Set<Addresses> getAddresses() {
-        return addresses;
-    }
-
-    public void setAddresses(Set<Addresses> addresses) {
-        this.addresses = addresses;
+    public Integer getIdPf() {
+        return idPf;
     }
 }
+
+
+

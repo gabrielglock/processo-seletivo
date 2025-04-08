@@ -3,7 +3,9 @@
 // The list of file replacements can be found in `angular.json`.
 
 export const environment = {
-  production: false
+  production: false,
+  apiUrl: '/api',
+  VIA_CEP_API: 'https://viacep.com.br/ws/'
 };
 
 /*

@@ -8,4 +8,5 @@ import java.util.List;
 
 public interface ContatoCnpjRepository extends JpaRepository<ContatoCnpj, Integer> {
     List<ContatoCnpj> findByCnpjNameContainingIgnoreCase(String nome);
+    List<ContatoCnpj> findByCnpjStartingWith(String cnpj);
 }
