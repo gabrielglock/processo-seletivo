@@ -5,14 +5,13 @@ import com.desafio.agenda.DTO.ContatoCnpjDTO;
 import com.desafio.agenda.DTO.ContatoCpfDTO;
 import com.desafio.agenda.Mappers.ContatoCnpjMapper;
 import com.desafio.agenda.Mappers.ContatoCpfMapper;
-import com.desafio.agenda.Model.Addresses;
+
 import com.desafio.agenda.Model.ContatoCnpj;
 import com.desafio.agenda.Model.ContatoCpf;
 import com.desafio.agenda.Repository.AddressesRepository;
 import com.desafio.agenda.Repository.ContatoCnpjRepository;
 import com.desafio.agenda.Repository.ContatoCpfRepository;
 import jakarta.validation.Valid;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 
 import org.springframework.data.domain.PageRequest;
@@ -20,8 +19,6 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.sql.SQLException;
 import java.util.*;
 import java.util.stream.Collectors;
 
@@ -44,39 +41,60 @@ public class AgendaController {
             @RequestParam(defaultValue = "0") int page,
             @RequestParam(defaultValue = "30") int size
     ) {
-
-
         switch (type.toLowerCase()) {
-            case "pf":
+            case "pf": {
                 Pageable pageablePf = PageRequest.of(page, size);
                 Page<ContatoCpf> pfPage = contatoCpfRepository.findAll(pageablePf);
                 // Converte cada entidade para DTO
                 Page<ContatoCpfDTO> pfDtoPage = pfPage.map(ContatoCpfMapper::toDTO);
                 return ResponseEntity.ok(pfDtoPage);
-
-            case "pj":
+            }
+            case "pj": {
                 Pageable pageablePj = PageRequest.of(page, size);
                 Page<ContatoCnpj> pjPage = contatoCnpjRepository.findAll(pageablePj);
                 Page<ContatoCnpjDTO> pjDtoPage = pjPage.map(ContatoCnpjMapper::toDTO);
                 return ResponseEntity.ok(pjDtoPage);
+            }
+            case "todos": {
 
-            case "todos":
-                Pageable pageable = PageRequest.of(page, size/2);
-                List<ContatoCpfDTO> pfDtos = contatoCpfRepository.findAll(pageable).getContent().stream()
-                        .map(ContatoCpfMapper::toDTO)
-                        .collect(Collectors.toList());
-                List<ContatoCnpjDTO> pjDtos = contatoCnpjRepository.findAll(pageable).getContent().stream()
-                        .map(ContatoCnpjMapper::toDTO)
-                        .collect(Collectors.toList());
+                Pageable pageableHalf = PageRequest.of(page, size / 2);
+
+                // PF
+                Page<ContatoCpf> pfPage = contatoCpfRepository.findAll(pageableHalf);
+                Page<ContatoCpfDTO> pfDtoPage = pfPage.map(ContatoCpfMapper::toDTO);
+
+                // PJ
+                Page<ContatoCnpj> pjPage = contatoCnpjRepository.findAll(pageableHalf);
+                Page<ContatoCnpjDTO> pjDtoPage = pjPage.map(ContatoCnpjMapper::toDTO);
                 Map<String, Object> result = new HashMap<>();
-                result.put("pf", pfDtos);
-                result.put("pj", pjDtos);
-                return ResponseEntity.ok(result);
 
+
+                result.put("pf", pfDtoPage.getContent());
+                result.put("pj", pjDtoPage.getContent());
+
+
+                Map<String, Object> pfMeta = new HashMap<>();
+                pfMeta.put("currentPage", pfDtoPage.getNumber());
+                pfMeta.put("pageSize", pfDtoPage.getSize());
+                pfMeta.put("totalElements", pfDtoPage.getTotalElements());
+                pfMeta.put("totalPages", pfDtoPage.getTotalPages());
+                result.put("pfMeta", pfMeta);
+
+
+                Map<String, Object> pjMeta = new HashMap<>();
+                pjMeta.put("currentPage", pjDtoPage.getNumber());
+                pjMeta.put("pageSize", pjDtoPage.getSize());
+                pjMeta.put("totalElements", pjDtoPage.getTotalElements());
+                pjMeta.put("totalPages", pjDtoPage.getTotalPages());
+                result.put("pjMeta", pjMeta);
+
+                return ResponseEntity.ok(result);
+            }
             default:
                 return ResponseEntity.badRequest().body("Tipo inválido. Use 'pf', 'pj' ou 'todos'.");
         }
     }
+
 
     @GetMapping("/api/contacts/search")
     public ResponseEntity<?> searchContacts(
@@ -88,8 +106,6 @@ public class AgendaController {
         }
 
         List<Object> resultados = new ArrayList<>();
-
-        // Busca por ID
         if (id != null) {
             contatoCpfRepository.findById(id).ifPresent(cpf -> {
                 Map<String, Object> contatoMap = new HashMap<>();
@@ -106,9 +122,9 @@ public class AgendaController {
             });
         }
 
-        // Busca por 'query': pode ser nome, CPF ou CNPJ
+
         if (query != null) {
-            // Para contatos PF: busca por nome e CPF
+
             List<ContatoCpf> contatosPfByNome = contatoCpfRepository.findByFirstNameContainingIgnoreCase(query);
             List<ContatoCpf> contatosPfByCpf = contatoCpfRepository.findByCpfStartingWith(query);
             Set<ContatoCpf> pfSet = new HashSet<>();
@@ -122,7 +138,7 @@ public class AgendaController {
                 resultados.add(contatoMap);
             }
 
-            // Para contatos PJ: busca por nome da empresa e por CNPJ
+
             List<ContatoCnpj> contatosPjByNome = contatoCnpjRepository.findByCnpjNameContainingIgnoreCase(query);
             List<ContatoCnpj> contatosPjByCnpj = contatoCnpjRepository.findByCnpjStartingWith(query);
             Set<ContatoCnpj> pjSet = new HashSet<>();
@@ -187,6 +203,7 @@ public class AgendaController {
         existing.setEmail(contatoCpf.getEmail());
         existing.setPhoneNumber(contatoCpf.getPhoneNumber());
         existing.setDescription(contatoCpf.getDescription());
+
 
 
         try {

@@ -41,18 +41,15 @@ public class EnderecoController {
         }
         ContatoCpf contato = contatoOpt.get();
 
-        // Converter DTO para entidade
+
         Addresses endereco = AddressesMapper.toEntity(addressesDTO);
-        // Assegure que o endereço será vinculado apenas ao contato PF
+
         endereco.setContatoCpf(contato);
         endereco.setContatoCnpj(null);
 
-        // Salvar o endereço e associar ao contato
         Addresses novoEndereco = addressesRepository.save(endereco);
         contato.getAddresses().add(novoEndereco);
         contatoCpfRepository.save(contato);
-
-        // Converter a entidade salva para DTO
         AddressesDTO novoEnderecoDTO = AddressesMapper.toDTO(novoEndereco);
 
         return ResponseEntity.ok(novoEnderecoDTO);
@@ -147,11 +144,10 @@ public class EnderecoController {
         ContatoCnpj contato = contatoOpt.get();
         Addresses endereco = enderecoOpt.get();
 
-        // Remove a associação entre contato e endereço
+
         if (contato.getAddresses().remove(endereco)) {
             contatoCnpjRepository.save(contato);
-            // Se o endereço não for compartilhado, você pode optar por deletá-lo:
-            // addressesRepository.delete(endereco);
+
             return ResponseEntity.ok(Map.of("mensagem", "Endereço desvinculado do contato PF."));
         } else {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST)
@@ -169,17 +165,17 @@ public class EnderecoController {
         }
 
         Addresses endereco = enderecoOpt.get();
-        // Atualiza os campos do endereço com os dados do DTO
+
         endereco.setCep(enderecoDTO.getCep());
         endereco.setContryState(enderecoDTO.getContryState());
         endereco.setStateCity(enderecoDTO.getStateCity());
         endereco.setCityNeighborhood(enderecoDTO.getCityNeighborhood());
         endereco.setAddress(enderecoDTO.getAddress());
+        endereco.setAddressExtra(enderecoDTO.getAddressExtra());
         endereco.setAddressNumber(enderecoDTO.getAddressNumber());
 
-        // Salva as alterações
         Addresses atualizado = addressesRepository.save(endereco);
-        // Converte a entidade atualizada para DTO
+
         AddressesDTO atualizadoDTO = AddressesMapper.toDTO(atualizado);
 
         return ResponseEntity.ok(atualizadoDTO);

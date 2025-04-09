@@ -40,9 +40,9 @@ export class ContactListComponent implements OnInit {
       type: ['todos']
     });
 
-    // Subscribe to filter changes
+    
     this.filterForm.valueChanges.subscribe(() => {
-      this.currentPage = 0; // Reset to first page when filter changes
+      this.currentPage = 0; 
       this.loadContacts();
     });
   }
@@ -55,19 +55,19 @@ export class ContactListComponent implements OnInit {
 
   onSearch(term: string) {
     this.searchTerm = term;
-    // Clear previous timeout
+    
     if (this.searchTimeout) {
       clearTimeout(this.searchTimeout);
     }
     
-    // Set new timeout
+    
     this.searchTimeout = setTimeout(() => {
       if (term.trim()) {
         this.searchContacts(term);
       } else {
         this.loadContacts();
       }
-    }, 300); // 300ms delay
+    }, 300); 
   }
 
   clearSearch() {
@@ -123,17 +123,19 @@ export class ContactListComponent implements OnInit {
           const pfContacts = (response.pf || []).map((contact: Contact) => ({ ...contact, type: 'PF' }));
           const pjContacts = (response.pj || []).map((contact: Contact) => ({ ...contact, type: 'PJ' }));
           this.contacts = [...pfContacts, ...pjContacts];
-          this.totalItems = response.totalElements || this.contacts.length;
+          
+          this.totalItems = response.pjMeta.totalElements+ response.pfMeta.totalElements || this.contacts.length;
+          
         } else {
-          // Garantir que os contatos mantenham seus tipos
+          
           this.contacts = (response.content || []).map((contact: Contact) => ({
             ...contact,
             type: filterType.toUpperCase()
           }));
           this.totalItems = response.totalElements || 0;
         }
-        console.log('Processed Contacts:', this.contacts); // Para debug
-        console.log('Total Items:', this.totalItems); // Para debug
+        console.log('Processed Contacts:', this.contacts); 
+        console.log('Total Items:', this.totalItems); // 
         this.loading = false;
       },
       error: (error) => {
@@ -192,7 +194,7 @@ export class ContactListComponent implements OnInit {
   private deleteContact(contact: Contact) {
     this.contactService.deleteContact(contact.id, contact.type).subscribe({
       next: (response) => {
-        console.log('Delete response:', response); // Para debug
+        console.log('Delete response:', response); // 
         this.snackBar.open('Contato excluído com sucesso', 'Fechar', {
           duration: 3000,
           horizontalPosition: 'end',
@@ -202,7 +204,7 @@ export class ContactListComponent implements OnInit {
       },
       error: (error) => {
         console.error('Error deleting contact:', error);
-        // Só mostra o erro se realmente houver um erro na API
+        
         if (error.status !== 200) {
           this.snackBar.open('Erro ao excluir contato', 'Fechar', {
             duration: 3000,
@@ -210,7 +212,7 @@ export class ContactListComponent implements OnInit {
             verticalPosition: 'top'
           });
         } else {
-          // Se o status for 200, considera como sucesso
+       
           this.snackBar.open('Contato excluído com sucesso', 'Fechar', {
             duration: 3000,
             horizontalPosition: 'end',

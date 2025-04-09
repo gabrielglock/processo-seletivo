@@ -32,7 +32,15 @@ public class Addresses {
 
     private String addressNumber;
 
+    private String addressExtra;
 
+    public String getAddressExtra() {
+        return addressExtra;
+    }
+
+    public void setAddressExtra(String addressExtra) {
+        this.addressExtra = addressExtra;
+    }
 
     @ManyToOne
     @JoinColumn(name = "contato_cpf_id_fk", referencedColumnName = "id_pf")

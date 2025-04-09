@@ -13,7 +13,7 @@
   </div>
 
   <mat-form-field appearance="outline" class="full-width">
-    <input matInput formControlName="email" type="email" [disabled]="loading" placeholder="Email">
+    <input matInput formControlName="email" type="email" [disabled]="loading" placeholder="Email" maxlength="319">
     <mat-error *ngIf="contactForm.get('email')?.hasError('required')">
       Email é obrigatório
     </mat-error>
@@ -24,22 +24,22 @@
 
   <mat-form-field appearance="outline" class="full-width">
     
-    <input matInput formControlName="phoneNumber" [disabled]="loading" placeholder="Telefone"  mask="(00) 00000-0000">
+    <input matInput formControlName="phoneNumber" [disabled]="loading" placeholder="Telefone"  mask="(00) 00000-0000" maxlength="15">
     <mat-error *ngIf="contactForm.get('phoneNumber')?.hasError('required')">
       Telefone é obrigatório
     </mat-error>
   </mat-form-field>
 
   <mat-form-field appearance="outline" class="full-width">
-    <input matInput formControlName="description" placeholder="Descrição" [disabled]="loading">
+    <input matInput formControlName="description" placeholder="Descrição" [disabled]="loading" maxlength="250">
     
   </mat-form-field>
 
-  <!-- PF Fields -->
+
   <ng-container *ngIf="contactForm.get('type')?.value === 'PF'">
     <mat-form-field appearance="outline" class="full-width">
       
-      <input matInput formControlName="cpf" mask="000.000.000-00" [disabled]="loading" placeholder="CPF">
+      <input matInput formControlName="cpf" mask="000.000.000-00" [disabled]="loading" placeholder="CPF" maxlength="14">
       <mat-error *ngIf="contactForm.get('cpf')?.hasError('required')">
         CPF é obrigatório
       </mat-error>
@@ -47,7 +47,7 @@
 
     <mat-form-field appearance="outline" class="half-width">
       
-      <input matInput formControlName="firstName" [disabled]="loading" placeholder="Nome">
+      <input matInput formControlName="firstName" [disabled]="loading" placeholder="Nome" maxlength="30">
       <mat-error *ngIf="contactForm.get('firstName')?.hasError('required')">
         Nome é obrigatório
       </mat-error>
@@ -55,7 +55,7 @@
 
     <mat-form-field appearance="outline" class="half-width">
       <mat-label>Sobrenome</mat-label>
-      <input matInput formControlName="surName" [disabled]="loading">
+      <input matInput formControlName="surName" [disabled]="loading" maxlength="60">
       
       <mat-error *ngIf="contactForm.get('surName')?.hasError('required')">
         Sobrenome é obrigatório
@@ -63,19 +63,18 @@
     </mat-form-field>
   </ng-container>
 
-  <!-- PJ Fields -->
   <ng-container *ngIf="contactForm.get('type')?.value === 'PJ'">
     <mat-form-field appearance="fill" class="full-width">
-      
-      <input matInput formControlName="cnpj" mask="00.000.000/0000-00" [disabled]="loading" placeholder="CNPJ">
+      <mat-label>CNPJ</mat-label>
+      <input matInput formControlName="cnpj" mask="00.000.000/0000-00" [disabled]="loading" maxlength="18">
       <mat-error *ngIf="contactForm.get('cnpj')?.hasError('required')">
         CNPJ é obrigatório
       </mat-error>
     </mat-form-field>
 
     <mat-form-field appearance="outline" class="full-width">
-      
-      <input matInput formControlName="cnpjName" [disabled]="loading" placeholder="Razão Social">
+      <mat-label>Razão Social</mat-label>
+      <input matInput formControlName="cnpjName" [disabled]="loading"  maxlength="50">
       <mat-error *ngIf="contactForm.get('cnpjName')?.hasError('required')">
         Razão Social é obrigatória
       </mat-error>

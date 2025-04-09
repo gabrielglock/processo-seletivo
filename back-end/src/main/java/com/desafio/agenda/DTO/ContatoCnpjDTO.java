@@ -11,7 +11,6 @@ public class ContatoCnpjDTO {
     private String description;
     private Set<AddressesDTO> addresses;
 
-    // Getters e Setters
     public Integer getId() {
         return id;
     }

@@ -12,17 +12,17 @@ public class CnpjValidator implements ConstraintValidator<CNPJ, String> {
             return false;
         }
 
-        // Remove os caracteres de formatação: pontos, hífens e barras
+
         cnpj = cnpj.replaceAll("[\\.\\-/]", "");
 
-        // Tenta converter para número para garantir que só há dígitos
+
         try {
             Long.parseLong(cnpj);
         } catch (NumberFormatException e) {
             return false;
         }
 
-        // Verifica se o CNPJ tem 14 dígitos e não é composto por uma sequência de números iguais
+
         if (cnpj.length() != 14 ||
                 cnpj.equals("00000000000000") ||
                 cnpj.equals("11111111111111") ||
@@ -41,7 +41,7 @@ public class CnpjValidator implements ConstraintValidator<CNPJ, String> {
         int sm, i, r, num, peso;
 
         try {
-            // Cálculo do 1º dígito verificador
+            // Cálculo do 1 dígito verificador
             sm = 0;
             peso = 2;
             for (i = 11; i >= 0; i--) {
@@ -59,7 +59,7 @@ public class CnpjValidator implements ConstraintValidator<CNPJ, String> {
                 dig13 = (char)((11 - r) + 48);
             }
 
-            // Cálculo do 2º dígito verificador
+            // Cálculo do 2 dígito verificador
             sm = 0;
             peso = 2;
             for (i = 12; i >= 0; i--) {
@@ -77,7 +77,7 @@ public class CnpjValidator implements ConstraintValidator<CNPJ, String> {
                 dig14 = (char)((11 - r) + 48);
             }
 
-            // Verifica se os dígitos calculados conferem com os dígitos informados
+            // Verifica se os dígitos calculados conferem com os dígitos
             return (dig13 == cnpj.charAt(12)) && (dig14 == cnpj.charAt(13));
 
         } catch (InputMismatchException erro) {

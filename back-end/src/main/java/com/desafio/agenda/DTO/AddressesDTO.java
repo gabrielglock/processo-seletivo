@@ -8,11 +8,19 @@ public class AddressesDTO {
     private String cityNeighborhood;
     private String address;
     private String addressNumber;
+    private String addressExtra;
 
-    // Getters e Setters
 
     public Integer getId() {
         return id;
+    }
+
+    public String getAddressExtra() {
+        return addressExtra;
+    }
+
+    public void setAddressExtra(String addressExtra) {
+        this.addressExtra = addressExtra;
     }
 
     public void setId(Integer id) {

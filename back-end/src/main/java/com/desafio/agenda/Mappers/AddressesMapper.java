@@ -13,6 +13,7 @@ public class AddressesMapper {
         dto.setStateCity(address.getStateCity());
         dto.setCityNeighborhood(address.getCityNeighborhood());
         dto.setAddress(address.getAddress());
+        dto.setAddressExtra(address.getAddressExtra());
         dto.setAddressNumber(address.getAddressNumber());
         return dto;
     }
@@ -23,6 +24,7 @@ public class AddressesMapper {
         entity.setStateCity(dto.getStateCity());
         entity.setCityNeighborhood(dto.getCityNeighborhood());
         entity.setAddress(dto.getAddress());
+        entity.setAddressExtra(dto.getAddressExtra());
         entity.setAddressNumber(dto.getAddressNumber());
         return entity;
     }

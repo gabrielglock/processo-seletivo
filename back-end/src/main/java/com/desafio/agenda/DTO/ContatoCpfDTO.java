@@ -14,7 +14,6 @@ public class ContatoCpfDTO {
     private String description;
     private Set<AddressesDTO> addresses;
 
-    // Getters e Setters
 
     public Integer getId() {
         return id;
